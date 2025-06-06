@@ -10,26 +10,31 @@ function getQueryParam(param) {
   return params.get(param);
 }
 
-// Get the message from query or default fallback
-const message = getQueryParam("message") || "Available Slot Found.";
+// Get the message from query
+const message = getQueryParam("message");
 
-function sendNotification() {
-  fetch(webhookURL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: message })
-  }).then(() => {
-    console.log("Notification sent:", message);
-  }).catch(err => {
-    console.error("Failed to send Discord message:", err);
-  });
+// Only send if a message exists
+if (message && message.trim()) {
+  function sendNotification() {
+    fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: message })
+    }).then(() => {
+      console.log("Notification sent:", message);
+    }).catch(err => {
+      console.error("Failed to send Discord message:", err);
+    });
+  }
+
+  // Send immediately on load
+  sendNotification();
+
+  // Then every 1 minute
+  setInterval(sendNotification, 60 * 1000);
+} else {
+  console.log("No message provided, Discord notification skipped.");
 }
-
-// Send immediately on load
-sendNotification();
-
-// Then every 1 minute
-setInterval(sendNotification, 60 * 1000);
 </script>
 </body>
 </html>
