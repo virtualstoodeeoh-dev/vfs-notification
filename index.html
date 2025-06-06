@@ -1,0 +1,26 @@
+<!-- notify-discord.html -->
+<html>
+<body>
+<script>
+const webhookURL = "https://discord.com/api/webhooks/1380553693774086184/-pbrDcK82soyl6_hKMHQyrt3wIOxogzTDPLKYE0YUfXsGUIYmFjXubEEUUbxkdsKMD84";
+
+function sendNotification() {
+  fetch(webhookURL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content: "✅ UI Vision triggered this message (1 min interval)" })
+  }).then(() => {
+    console.log("Notification sent.");
+  }).catch(err => {
+    console.error("Failed to send Discord message:", err);
+  });
+}
+
+// Send immediately on load
+sendNotification();
+
+// Then every 1 minute
+setInterval(sendNotification, 60 * 1000);
+</script>
+</body>
+</html>
