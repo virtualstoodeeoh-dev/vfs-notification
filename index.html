@@ -4,13 +4,22 @@
 <script>
 const webhookURL = "https://discord.com/api/webhooks/1380553693774086184/-pbrDcK82soyl6_hKMHQyrt3wIOxogzTDPLKYE0YUfXsGUIYmFjXubEEUUbxkdsKMD84";
 
+// Helper to get query parameters
+function getQueryParam(param) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(param);
+}
+
+// Get the message from query or default fallback
+const message = getQueryParam("message") || "Available Slot Found.";
+
 function sendNotification() {
   fetch(webhookURL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: "✅ UI Vision triggered this message (1 min interval)" })
+    body: JSON.stringify({ content: message })
   }).then(() => {
-    console.log("Notification sent.");
+    console.log("Notification sent:", message);
   }).catch(err => {
     console.error("Failed to send Discord message:", err);
   });
